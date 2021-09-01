@@ -1,0 +1,35 @@
+- name: "Run Application using Docker On Dev Server"
+  hosts: dev
+  become: true
+  gather_facts: no
+  vars_files:
+    - docker.vars
+
+  tasks:
+
+    - name: "Deploy Step: List of additional package Installation"
+      yum:
+        name:
+        - git
+        - python3-pip
+        state: present
+
+    - name: "Deploy Step: Python docker extension installation"
+      pip:
+        name: docker-py
+
+
+    - name: "Deploy Step: Docker service restart & enable"
+      service:
+        name: docker
+        state: restarted
+        enabled: true
+
+    - name: "Deploy Step: Run the container"
+      docker_container:
+        name: flaskapp
+        image: "{{ image_name }}:1"
+        recreate: yes
+        pull: yes
+        published_ports:
+          - "8888:5000"
