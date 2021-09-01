@@ -91,7 +91,7 @@ Must have Ansible and Jenkins installed on build server
         name: flaskapp
         image: "{{ image_name }}:1"
         recreate: yes
-        # pull: yes
+        pull: yes
         published_ports:
           - "8888:5000"
 ~~~
